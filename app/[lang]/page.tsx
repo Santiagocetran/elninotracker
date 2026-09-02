@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { Degradacion } from '@/components/Degradacion'
+import { Motor } from '@/components/Motor'
 import { Oficial } from '@/components/Oficial'
 import { Serie } from '@/components/Serie'
 import { Stat } from '@/components/Stat'
@@ -117,7 +118,10 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       {/* 3 · Lo que declara el CPC. Separado de nuestra clasificación a propósito. */}
       <Oficial advisory={advisory} d={d} />
 
-      {/* 4 · Qué significa para mí — el diferencial. Va ARRIBA del mapa. */}
+      {/* 4 · Por qué pasa — el explicador del mecanismo (DESIGN.md §6.1) */}
+      <Motor faseActual={estado.fase} d={d} />
+
+      {/* 5 · Qué significa para mí — el diferencial. Va ARRIBA del mapa. */}
       <section className="bloque">
         <h2>{d.significa.titulo}</h2>
         {regiones.length === 0 ? (

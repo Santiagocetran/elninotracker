@@ -315,3 +315,103 @@ p { margin: 0 0 1em; max-width: 66ch; }
 
 .significa__region:hover { color: var(--accent); }
 .significa__faltan { margin-top: calc(var(--paso) * 2); }
+
+/* ---- .motor: el corte del Pacífico (DESIGN.md §6.1) ------------------- */
+
+.motor__intro { margin-top: calc(var(--paso) * 3); font-size: 1.25rem; }
+.motor__caja { margin-top: calc(var(--paso) * 4); }
+.motor__radio { position: absolute; opacity: 0; pointer-events: none; }
+
+.motor__botones { display: flex; gap: calc(var(--paso) * 1.5); flex-wrap: wrap; }
+
+.motor__boton {
+  font-family: var(--fuente-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  padding: calc(var(--paso) * 1.25) calc(var(--paso) * 2);
+  cursor: pointer;
+}
+
+.motor__boton:hover { color: var(--ink); border-color: var(--ink-3); }
+
+/* El radio marcado ilumina su botón y muestra su escena. */
+#motor-nina:checked   ~ .motor__botones .motor__boton:nth-child(1),
+#motor-normal:checked ~ .motor__botones .motor__boton:nth-child(2),
+#motor-nino:checked   ~ .motor__botones .motor__boton:nth-child(3) {
+  color: var(--bg);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.motor__escena { position: relative; margin-top: calc(var(--paso) * 3); }
+
+.motor__cabeceras {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--paso);
+}
+
+.motor__svg,
+.motor__texto { display: none; }
+
+.motor__svg { width: 100%; height: auto; }
+
+#motor-nina:checked   ~ .motor__escena .motor__svg--nina,
+#motor-normal:checked ~ .motor__escena .motor__svg--normal,
+#motor-nino:checked   ~ .motor__escena .motor__svg--nino,
+#motor-nina:checked   ~ .motor__escena .motor__texto--nina,
+#motor-normal:checked ~ .motor__escena .motor__texto--normal,
+#motor-nino:checked   ~ .motor__escena .motor__texto--nino { display: block; }
+
+.motor__texto {
+  margin-top: calc(var(--paso) * 2);
+  font-size: 1.125rem;
+  max-width: 62ch;
+}
+
+/* Piezas del corte */
+.motor__agua { fill: var(--surface-2); }
+.motor__pileta { fill: var(--d2); opacity: 0.75; }
+.motor__termoclina { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 7 5; }
+.motor__tierra { fill: var(--line); }
+.motor__lecho { stroke: var(--ink-3); stroke-width: 1; fill: none; }
+.motor__viento line { stroke: var(--ink-2); stroke-width: 2; }
+.motor__viento path { fill: var(--ink-2); }
+.motor__aflora line { stroke: var(--d-2); stroke-width: 2.5; }
+.motor__aflora path { fill: var(--d-2); }
+
+.motor__leyenda {
+  list-style: none;
+  padding: 0;
+  margin: calc(var(--paso) * 3) 0 0;
+  display: flex;
+  gap: calc(var(--paso) * 3);
+  flex-wrap: wrap;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.motor__leyenda li { display: flex; align-items: center; gap: var(--paso); }
+
+.motor__punto { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.motor__punto--pileta { background: var(--d2); height: 10px; }
+.motor__punto--termo { background: var(--ink); }
+.motor__punto--viento { background: var(--ink-2); }
+
+.motor__nota { margin-top: calc(var(--paso) * 3); }
+
+.motor__rotulo {
+  font-family: var(--fuente-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--bg);
+  opacity: 0.75;
+}
+
+.motor__rotulo--frio { fill: var(--ink-3); opacity: 1; }

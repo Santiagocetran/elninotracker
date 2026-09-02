@@ -12,12 +12,12 @@
 export const es = {
   estado: {
     notaClasificacion: {
-      pre: 'La fase y la intensidad de arriba son una ',
-      fuerte1: 'clasificación descriptiva por umbral',
-      medio: ' sobre el ',
-      fuerte2: 'RONI',
-      post: ', el índice operativo del CPC desde febrero de 2026. La observación más reciente en la región Niño 3.4 es ',
-      cierrePre: ' para la semana del ',
+      pre: 'Ese número mide ',
+      fuerte1: 'cuánto se aparta el Pacífico de su temperatura habitual',
+      medio: ' en una zona del océano llamada ',
+      fuerte2: 'Niño 3.4',
+      post: ', frente a Ecuador y Perú. La etiqueta —débil, moderado, fuerte— la ponemos nosotros según ese valor. La última medición semanal dio ',
+      cierrePre: ', el ',
       cierrePost: ' ',
     },
   },
@@ -26,24 +26,24 @@ export const es = {
     titulo: 'Cómo leer estos números',
     roni: {
       nombre: 'RONI',
-      texto: ' — índice operativo actual del CPC. La lectura de arriba es del trimestre ',
+      texto: ' — el número que usa hoy el organismo de Estados Unidos que sigue el fenómeno. Promedia tres meses, así que cambia despacio. El de arriba es de ',
       cierre: '.',
       enlace: 'RONI · ',
     },
     semanal: {
       nombre: 'Niño 3.4 semanal',
       texto: ' — la observación más reciente (',
-      cierre: '). Es instantánea y por eso siempre más extrema que un promedio de tres meses.',
+      cierre: '). Es la foto de una semana sola, así que salta más que el promedio: casi siempre se ve más extrema.',
       enlace: 'semanal · ',
     },
     oni: {
       nombre: 'ONI',
-      texto: ' — contexto y comparación histórica. Es la línea de abajo, desde 1950, y ya no se usa para describir el estado actual.',
+      texto: ' — el número que se usaba antes. Sirve para comparar con los eventos de las últimas décadas: es la línea que ves más abajo, desde 1950.',
       enlace: 'ONI · ',
     },
     advisory: {
       nombre: 'Estado oficial del CPC',
-      texto: ' — lo que el CPC declara en su comunicado ENSO. Este sitio no lo calcula: lo relaya.',
+      texto: ' — lo que el organismo oficial dice en su comunicado mensual. No lo calculamos nosotros: lo copiamos tal cual y te dejamos el link.',
       enlace: 'ENSO Advisory →',
     },
   },
@@ -55,17 +55,57 @@ export const es = {
     rotulo: 'Estado oficial declarado',
     comunicadoDel: 'Comunicado del ',
     proximaActualizacion: ' · próxima actualización ',
-    nota: 'Es la traducción oficial de NOAA, citada textualmente. La clasificación de arriba, en cambio, es nuestra lectura por umbral del RONI: pueden no coincidir, porque el CPC pondera además atmósfera, pronósticos y juicio experto. ',
+    nota: 'Esto es lo que dice el comunicado oficial, traducido por la propia NOAA. Puede no coincidir con la etiqueta de más arriba, y no es un error: nosotros clasificamos mirando un solo número, y ellos miran además el viento, las nubes y lo que esperan para los próximos meses. ',
     notaEnlace: 'COMUNICADO COMPLETO →',
+  },
+
+  motor: {
+    titulo: '¿Por qué pasa esto?',
+    intro:
+      'El Niño no empieza en el mar: empieza en el viento. Este es un corte del océano Pacífico visto de costado, desde Indonesia hasta la costa de Perú.',
+    oeste: '← Indonesia',
+    este: 'Perú →',
+    rotulos: {
+      caliente: 'agua caliente',
+      fria: 'agua fría',
+      viento: 'viento',
+    },
+    leyenda: {
+      pileta: 'Agua caliente acumulada',
+      termoclina: 'Dónde empieza el agua fría',
+      viento: 'Viento que sopla hacia el oeste',
+    },
+    estados: {
+      normal: {
+        nombre: 'Un año normal',
+        texto:
+          'Casi siempre el viento sopla desde América hacia Asia y va empujando el agua caliente de la superficie hacia el oeste. Se amontona allá, del lado de Indonesia. Y como esa agua se va, del lado de Perú sube agua fría desde el fondo para reemplazarla: por eso el mar es frío en esa costa, y por eso hay tantos peces.',
+        alt: 'Corte del Pacífico en año normal: el viento sopla hacia el oeste, el agua caliente se acumula del lado de Indonesia y frente a Perú sube agua fría.',
+      },
+      nino: {
+        nombre: 'El Niño',
+        texto:
+          'A veces ese viento afloja. Cuando eso pasa, el agua caliente que estaba amontonada del lado de Indonesia se desparrama hacia el este, como agua en una bañadera cuando dejás de soplarla. Deja de subir agua fría frente a Perú y el Pacífico entero queda más caliente que de costumbre. Eso es El Niño. Y ese calor cambia por dónde llueve, no sólo ahí: en medio mundo.',
+        alt: 'Corte del Pacífico durante El Niño: el viento se debilita, el agua caliente se extiende hacia el este y deja de subir agua fría frente a Perú.',
+      },
+      nina: {
+        nombre: 'La Niña',
+        texto:
+          'Y a veces pasa lo contrario: el viento sopla más fuerte que de costumbre. Empuja todavía más agua caliente hacia Indonesia y hace subir más agua fría frente a Perú. El Pacífico queda más frío que de costumbre. Eso es La Niña, la otra cara del mismo fenómeno.',
+        alt: 'Corte del Pacífico durante La Niña: el viento sopla más fuerte, el agua caliente se apila más al oeste y sube más agua fría frente a Perú.',
+      },
+    },
+    nota:
+      'Es un esquema para explicar el mecanismo, no una medición. Las proporciones están exageradas para que se vea: en la realidad el océano es miles de veces más ancho que profundo.',
   },
 
   significa: {
     titulo: '¿Qué significa para mí?',
     pendiente:
-      'Los paneles de impacto por región todavía no están publicados. Es la parte de mayor valor del sitio y la de mayor riesgo editorial, así que no se improvisa.',
+      'Todavía no publicamos los textos por región. Es la parte más útil del sitio y también la más fácil de arruinar, así que preferimos tardar.',
     entrada:
-      'Lo que suele pasar en cada región durante esta fase, según el registro histórico y con la fuente de cada afirmación a la vista.',
-    faltan: 'Las demás regiones todavía no están publicadas.',
+      'Qué suele pasar en cada lugar cuando el Pacífico está así. No es una predicción: es lo que se vio en eventos parecidos, y abajo de cada frase está de dónde sale.',
+    faltan: 'Las demás regiones están en camino.',
   },
 
   historico: {
@@ -106,14 +146,14 @@ export const es = {
   region: {
     volver: '← Volver a la portada',
     fraseEncuadre:
-      'Esto es lo que suele pasar en esta región durante una fase así, según el registro histórico. No es un pronóstico del evento en curso.',
+      'Esto es lo que suele pasar acá cuando el Pacífico está así. No es una predicción de lo que va a pasar este año: es lo que se vio en años parecidos.',
     faseActualRotulo: 'Fase actual, según el RONI',
     otrasFases: 'Las otras fases',
     sinFaseActual:
-      'Ahora mismo no se puede determinar la fase con el RONI, así que se muestran las tres.',
+      'Ahora mismo no tenemos el dato para saber en qué fase estamos, así que te mostramos las tres.',
     evidencia: {
-      consistente: 'La señal aparece de forma consistente entre eventos.',
-      mixta: 'La señal es mixta: no todos los eventos la expresan igual.',
+      consistente: 'Esto se repite en casi todos los eventos.',
+      mixta: 'Esto no pasa siempre: hubo eventos en que no se notó.',
     },
     estacion: {
       'todo-el-año': 'Todo el año',
@@ -130,7 +170,7 @@ export const es = {
     borrador: {
       distintivo: 'BORRADOR — SIN REVISAR',
       explicacion:
-        'Este panel todavía no pasó revisión editorial. El texto puede cambiar o contener errores. No está enlazado desde la portada ni indexado por buscadores.',
+        'Todavía nadie revisó este texto. Puede cambiar o tener errores. Por eso no lo enlazamos desde la portada ni aparece en Google.',
     },
     fases: {
       nino: 'El Niño',
