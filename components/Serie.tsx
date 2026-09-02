@@ -1,5 +1,6 @@
 import { scaleLinear } from 'd3-scale'
 import { area, line } from 'd3-shape'
+import type { Diccionario } from '@/lib/diccionarios'
 
 /**
  * Línea temporal del ONI, renderizada EN SERVIDOR como SVG.
@@ -40,10 +41,12 @@ function picos(serie: Punto[], umbral: number, signo: 1 | -1) {
 
 export function Serie({
   serie,
+  d,
   ancho = 1100,
   alto = 300,
 }: {
   serie: Punto[]
+  d: Diccionario
   ancho?: number
   alto?: number
 }) {
@@ -65,8 +68,8 @@ export function Serie({
   const areaGen = area<Punto>().x(px).y0(cero).y1((p) => y(p.anom))
   const lineaGen = line<Punto>().x(px).y((p) => y(p.anom))
 
-  const d = areaGen(serie) ?? ''
-  const dLinea = lineaGen(serie) ?? ''
+  const areaPath = areaGen(serie) ?? ''
+  const lineaPath = lineaGen(serie) ?? ''
 
   const calidos = picos(serie, 2.0, 1)
   const frios = picos(serie, 1.8, -1)
@@ -83,9 +86,7 @@ export function Serie({
       className="serie"
       viewBox={`0 0 ${ancho} ${alto}`}
       role="img"
-      aria-label={`Anomalía del índice ONI entre ${a0} y ${a1}. Los picos cálidos más fuertes fueron ${calidos
-        .map((p) => p.fecha.slice(0, 4))
-        .join(', ')}. Último valor ${ultimo.anom} grados.`}
+      aria-label={d.historico.descripcion(a0, a1, ultimo.anom)}
     >
       <defs>
         <clipPath id="serie-calido">
@@ -110,10 +111,10 @@ export function Serie({
         </text>
       ))}
 
-      <path className="serie__area serie__area--calido" d={d} clipPath="url(#serie-calido)" />
-      <path className="serie__area serie__area--frio" d={d} clipPath="url(#serie-frio)" />
+      <path className="serie__area serie__area--calido" d={areaPath} clipPath="url(#serie-calido)" />
+      <path className="serie__area serie__area--frio" d={areaPath} clipPath="url(#serie-frio)" />
       <line className="serie__cero" x1={pad.izquierda} x2={ancho - pad.derecha} y1={cero} y2={cero} />
-      <path className="serie__linea" d={dLinea} />
+      <path className="serie__linea" d={lineaPath} />
 
       {calidos.map((p) => (
         <g key={p.fecha}>

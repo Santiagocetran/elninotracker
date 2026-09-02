@@ -4,26 +4,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository state
 
-Next.js 16 app, git repo on `master`. `pnpm build` ya no corre la ingesta: la portada
-obtiene los datos en runtime por una función cacheada y cae a `data/seed.json` (versionado)
-si NOAA no responde. `pnpm ingest` es la validación estricta a demanda que refresca ese seed.
+Next.js 16 app (App Router, i18n bajo `app/[lang]`), git repo on `master`. `pnpm build` ya no
+corre la ingesta: la portada obtiene los datos en runtime por una función cacheada y cae a
+`data/seed.json` (versionado) si NOAA no responde. `pnpm ingest` es la validación estricta a
+demanda que refresca ese seed.
 
 ```
 pnpm dev            next dev
 pnpm build          next build (cache components + seed fallback)
 pnpm ingest         fetch NOAA → valida invariantes + escribe data/seed.json (exit 1 si rancio/futuro)
 pnpm seed           regenera data/seed.json desde tests/fixtures
-pnpm test           tsx --test tests/*.test.ts
+pnpm test           tsx --test (parsers, copy, regiones, render)
+pnpm lint           eslint — falla ante un literal de texto en JSX (chrome → diccionario)
 pnpm typecheck      tsc --noEmit
 pnpm check:design   contraste AA · colores literales · firma de dato
 ```
+
+`/` redirige 308 a `/es`. `/pt` devuelve 404 hasta tener traducción real. ESLint no usa
+`typescript-eslint` (rechaza TS 7.0): parsea TSX con Babel, sin análisis de tipos.
 
 **Three documents disagree; know which to trust.**
 
 | | Status |
 |---|---|
 | `Plans/01-v0-prueba-de-concepto.md` | **Done except B3.4/B3.5.** Read for the defects it fixed. |
-| `Plans/02-v1-que-significa-para-mi.md` | **Current.** Awaiting audit before implementation. Start here. |
+| `Plans/02-v1-que-significa-para-mi.md` | **Current.** D0–D3 done (i18n + rutas + ESLint + esquema editorial + región piloto Litoral en `borrador`). D4 (seis regiones), D5 (mapa), D6 (SEO) pendientes. Start here. |
 | `DESIGN.md` | Current, except §8's claim that "sin fuente no compila" — that is aspirational, not enforced. |
 | `CLAUDE.md` | Current. |
 | `README.md` | **Partly stale.** §6 lists a dead endpoint, §7 prescribes Vite + Recharts. Founding doc, owner's call to amend. |
@@ -51,8 +56,11 @@ The five defects below are fixed and covered by tests/checks (Plan 01 B0/B2/B3.1
 - Future dates fail the freshness check (`lib/validacion.ts`) — B2.2.
 - `scripts/check-design.ts` exists and fails on real violations — B3.1.
 
-The app is a working v0 proof of concept; regional panels, the map, and `/datos` are still out
-of scope.
+v0 works; v1 is under way. The **pilot region** (`lib/regiones/litoral.ts`) ships as
+`borrador`: reachable at `/es/regiones/litoral`, `noindex`, out of sitemap/nav/homepage. Its
+climatology text is **unreviewed** — the owner reviews it by URL and it becomes `revisado`
+only then (a later text edit re-invalidates that by hash). The map and `/datos` are still out
+of scope (D5, v2).
 
 ## What the product is
 
@@ -136,7 +144,8 @@ keep attribution visible in the UI.
 **Next.js 16 (App Router) + TypeScript on Vercel.** The README proposes React + Vite; that was
 overridden. SEO is a stated product goal (§8: beat La Nación and Infobae on "el niño"), and a Vite
 SPA ships an empty root div. Server-rendered HTML, `generateMetadata`, sitemaps, JSON-LD
-(`Dataset` + `Article`) and native i18n routing (`/es`, `/pt`) are the reason for the change.
+(`Dataset` + `Article`) and native i18n routing (`/[lang]`; `/es` live, `/pt` 404 until
+translated — Plan 02 D1) are the reason for the change.
 
 - **Ingest:** Vercel Cron → Route Handler → ISR revalidation. No backend, no database (README §7).
 - **Map:** `maplibre-gl` + GIBS raster tiles (see above).

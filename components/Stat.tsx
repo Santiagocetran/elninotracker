@@ -1,4 +1,5 @@
 import type { Dato } from '@/lib/enso'
+import type { Diccionario } from '@/lib/diccionarios'
 import { anomalia, fechaCorta } from '@/lib/formato'
 
 /**
@@ -12,7 +13,15 @@ import { anomalia, fechaCorta } from '@/lib/formato'
  * celda del ancho de un dígito: a 8rem eso abre un hueco que hace leer
  * "+2 , 6".
  */
-export function Stat({ dato, temporada }: { dato: Dato; temporada?: string }) {
+export function Stat({
+  dato,
+  temporada,
+  d,
+}: {
+  dato: Dato
+  temporada?: string
+  d: Diccionario
+}) {
   const [entera, decimal] = anomalia(dato.valor).split(',')
   const fecha = temporada ?? fechaCorta(dato.fecha)
 
@@ -20,16 +29,20 @@ export function Stat({ dato, temporada }: { dato: Dato; temporada?: string }) {
     <div className="stat">
       <span className="stat__valor stat__valor--acento">
         {entera}
-        <span className="stat__sep">,</span>
+        <span className="stat__sep">{d.stat.sep}</span>
         {decimal}
       </span>
       <span className="stat__meta">
-        <span className="stat__unidad dato">°C</span>
+        <span className="stat__unidad dato">{d.stat.unidad}</span>
         <span className="etiqueta">
-          {dato.indice} · {fecha}
+          {dato.indice}
+          {d.comun.separador}
+          {fecha}
         </span>
         <a className="fuente" href={dato.fuente.url}>
-          FUENTE: {dato.fuente.nombre} →
+          {d.stat.fuente}
+          {dato.fuente.nombre}
+          {d.comun.flecha}
         </a>
       </span>
     </div>

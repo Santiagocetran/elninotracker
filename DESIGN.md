@@ -266,7 +266,9 @@ En `scripts/check-design.ts`, corriendo en CI:
 4. **Contraste AA** en todo par texto/fondo, verificado sobre los tokens.
 5. **`tabular-nums`** presente en toda clase que renderice cifras.
 6. **Atribución del mapa** presente cuando hay un tile de GIBS en el DOM.
-7. **Sin strings hardcodeados** en JSX: todo texto pasa por i18n.
+7. **Sin strings hardcodeados** en JSX: todo chrome pasa por el diccionario por idioma. Esto
+   lo verifica **ESLint** (`react/jsx-no-literals`, Plan 02 D1), no `check-design.ts` — el
+   contenido editorial es dato, no cadena de interfaz, y lo cubre un validador de ids aparte.
 8. **Decimales** dentro de lo declarado por índice. (A8)
 
 ---

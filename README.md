@@ -182,10 +182,15 @@ contenido genuinamente mejor, actualizado, y estructurado — no es un problema 
 **v1 — El producto**
 - [ ] Mapa de anomalía de TSM
 - [ ] Paneles "qué significa para mí" por país/región
-- [ ] i18n es/pt
+- [ ] Arquitectura i18n en v1: rutas `/[lang]`, diccionarios y esquema por
+      locale. `/es` completo; **traducción pt-BR diferida** — `/pt` devuelve 404
+      hasta que exista (servir castellano bajo bandera portuguesa es peor que no
+      ofrecerlo). Ver `Plans/02-v1-que-significa-para-mi.md` D1.
 - [ ] Metadatos y estructura para SEO
 
 **v2 — Profundidad**
+- [ ] `/datos` — la sala de control densa (diferida desde v1; ver Plan 02 D0.4)
+- [ ] Traducción pt-BR y `/pt` activo
 - [ ] Años análogos
 - [ ] Plume de modelos IRI
 - [ ] Resumen del comunicado mensual del CPC en castellano llano

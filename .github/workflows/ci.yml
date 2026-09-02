@@ -25,7 +25,10 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Tests de parsers y copy
+      - name: ESLint (falla ante un literal en JSX)
+        run: pnpm lint
+
+      - name: Tests de parsers, copy y regiones
         run: pnpm test
 
       - name: Checks determinísticos de diseño

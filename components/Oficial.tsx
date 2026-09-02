@@ -1,5 +1,6 @@
 import type { Advisory } from '@/lib/sources/cpc-advisory'
 import { CPC_ADVISORY } from '@/lib/sources/cpc-advisory'
+import type { Diccionario } from '@/lib/diccionarios'
 import { fechaCorta } from '@/lib/formato'
 
 /**
@@ -17,15 +18,15 @@ import { fechaCorta } from '@/lib/formato'
  * Si el comunicado no se pudo leer, `advisory` es null y el bloque se omite
  * dejando el enlace: nunca se inventa un estado.
  */
-export function Oficial({ advisory }: { advisory: Advisory | null }) {
+export function Oficial({ advisory, d }: { advisory: Advisory | null; d: Diccionario }) {
   if (!advisory) {
     return (
       <section className="bloque">
-        <h2>Qué dice el CPC</h2>
+        <h2>{d.oficial.titulo}</h2>
         <p className="oficial__nota">
-          No pudimos leer el último comunicado automáticamente.{' '}
+          {d.oficial.sinLeer}
           <a className="fuente" href={CPC_ADVISORY.url}>
-            LEERLO EN LA FUENTE →
+            {d.oficial.sinLeerEnlace}
           </a>
         </p>
       </section>
@@ -34,25 +35,23 @@ export function Oficial({ advisory }: { advisory: Advisory | null }) {
 
   return (
     <section className="bloque">
-      <h2>Qué dice el CPC</h2>
+      <h2>{d.oficial.titulo}</h2>
 
-      <p className="etiqueta oficial__rotulo">Estado oficial declarado</p>
+      <p className="etiqueta oficial__rotulo">{d.oficial.rotulo}</p>
       <p className="oficial__estado">{advisory.estado}</p>
 
       <blockquote className="oficial__sinopsis">{advisory.sinopsis}</blockquote>
 
       <p className="oficial__meta eje">
-        Comunicado del {fechaCorta(advisory.fecha)}
-        {advisory.proxima ? ` · próxima actualización ${fechaCorta(advisory.proxima)}` : ''}
+        {d.oficial.comunicadoDel}
+        {fechaCorta(advisory.fecha)}
+        {advisory.proxima ? `${d.oficial.proximaActualizacion}${fechaCorta(advisory.proxima)}` : ''}
       </p>
 
       <p className="oficial__nota">
-        Es la traducción oficial de NOAA, citada textualmente. La clasificación de
-        arriba, en cambio, es nuestra lectura por umbral del RONI: pueden no
-        coincidir, porque el CPC pondera además atmósfera, pronósticos y juicio
-        experto.{' '}
+        {d.oficial.nota}
         <a className="fuente" href={CPC_ADVISORY.url}>
-          COMUNICADO COMPLETO →
+          {d.oficial.notaEnlace}
         </a>
       </p>
     </section>

@@ -160,6 +160,52 @@ p { margin: 0 0 1em; max-width: 66ch; }
 .region__lugar { display: block; margin-bottom: calc(var(--paso) * 0.5); }
 .region__que { font-size: 1.25rem; }
 
+/* ---- Panel regional (Plan 02 D3) ------------------------------------------ */
+
+.volver { display: inline-block; margin-bottom: calc(var(--paso) * 3); }
+
+.panel__encuadre {
+  border-left: 2px solid var(--line);
+  padding-left: calc(var(--paso) * 2);
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+}
+
+.fase-actual__rotulo { margin-bottom: var(--paso); }
+
+.fase-bloque__titulo {
+  color: var(--accent);
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--paso);
+}
+
+.afirmacion { border-top: 1px solid var(--line); padding: calc(var(--paso) * 3) 0; }
+.afirmacion__texto { font-size: 1.1875rem; }
+.afirmacion__meta { display: flex; flex-wrap: wrap; gap: calc(var(--paso) * 2); margin-bottom: var(--paso); }
+.afirmacion__fuentes { margin: var(--paso) 0 0; padding: 0; list-style: none; }
+.afirmacion__fuentes li { margin-bottom: calc(var(--paso) * 0.5); }
+
+.otras-fases { margin-top: calc(var(--paso) * 6); }
+.otras-fases > .fase-bloque { opacity: 0.85; }
+
+/* Distintivo de borrador: fuerte, imposible de no ver, sin color nuevo. */
+.distintivo {
+  border: 1px solid var(--ink-2);
+  border-left-width: 4px;
+  background: var(--surface-2);
+  padding: calc(var(--paso) * 2);
+  margin-bottom: calc(var(--paso) * 4);
+}
+
+.distintivo__sello {
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.distintivo__texto { margin: var(--paso) 0 0; color: var(--ink-2); font-size: 1rem; }
+
 /* ---- .serie: línea temporal ------------------------------------------- */
 
 .serie { width: 100%; height: auto; display: block; }
