@@ -31,7 +31,7 @@ La tensión entre las dos es el producto. Si sólo es editorial, es una nota de 
 instrumento, es CIIFEN — que ya existe y nadie usa.
 
 **Referencia de densidad:** la portada es una página, no un tablero. La sala de control existe,
-pero vive en `/datos` (v1) y se entra a propósito.
+pero vive en `/datos` (**diferida a v2** — ver Plan 02 D0.4) y se entra a propósito.
 
 ---
 
@@ -149,7 +149,7 @@ Orden fijo, de arriba a abajo. Cada bloque responde una pregunta y sólo una:
 
 El mapa **nunca** va primero. Es lindo y no informa; ver anti-patrón A7.
 
-### `/datos` (v1)
+### `/datos` (diferida a v2 — Plan 02 D0.4)
 
 Acá sí: multipanel, denso, todos los índices, las cuatro regiones Niño, SOI, plume de IRI. Es la
 sala de máquinas. Se asume que quien entra sabe lo que busca.

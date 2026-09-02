@@ -158,7 +158,8 @@ Decided: dark-first "editorial instrument" register (`#0A0B0D`), a single accent
 by the current ENSO phase** (warm for El Niño, cool for La Niña, slate for neutral), Literata +
 IBM Plex Mono with **no sans at all** — serif is what we write, mono is what was measured, and the
 big homepage number is therefore mono — and a homepage led by that number
-(README §5.1) — never by the map. `/datos`, the dense control-room page, lands in v1.
+(README §5.1) — never by the map. `/datos`, the dense control-room page, is **deferred to v2**
+(Plan 02 D0.4); it was promised for v1 in three documents and none of them said otherwise.
 
 `DESIGN.md` §7 names ten anti-patterns. §8 lists the deterministic checks, including the
 freshness assertion that `wksst8110.for` would have failed.
