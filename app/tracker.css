@@ -1,0 +1,219 @@
+/*
+ * tracker.css — la capa de MECÁNICA del sistema de diseño.
+ *
+ * DESIGN.md tiene el criterio en prosa. Acá viven los tokens y las clases
+ * reutilizables. Componer con estas clases; no inventar tipografía ni espaciado
+ * en el JSX. Cualquier color literal fuera de este archivo es un bug (A6, A9).
+ */
+
+:root {
+  /* Ground */
+  --bg: #0a0b0d;
+  --surface: #121417;
+  --surface-2: #17191d;
+  --line: #1e2126;
+  --ink: #e8e8e6;
+  --ink-2: #9a9c9f;
+  --ink-3: #7d8085;
+
+  /* El acento lo dicta la fase. Ver DESIGN.md §2. */
+  --nino: #f4703a;
+  --nina: #43b0c4;
+  --neutral: #7d8a99;
+  --accent: var(--neutral);
+
+  /* Escala divergente de datos. Nunca arcoíris (A2). */
+  --d-3: #2e6e8e;
+  --d-2: #4e96ae;
+  --d-1: #8fbfcc;
+  --d0: #2a2d31;
+  --d1: #d9a273;
+  --d2: #e07a45;
+  --d3: #c2452a;
+
+  --paso: 8px;
+  --ancho: 1200px;
+  --radio: 3px;
+}
+
+[data-fase='nino'] { --accent: var(--nino); }
+[data-fase='nina'] { --accent: var(--nina); }
+[data-fase='neutral'] { --accent: var(--neutral); }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--fuente-serif), Georgia, serif;
+  /* Sobre oscuro el texto se ve más fino de lo que es. Nunca bajar de acá. */
+  font-size: 1.125rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.envoltorio {
+  max-width: var(--ancho);
+  margin: 0 auto;
+  padding: calc(var(--paso) * 5) calc(var(--paso) * 3);
+}
+
+/* ---- Tipografía ------------------------------------------------------- */
+
+h1, h2, h3 { font-weight: 600; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(1.9rem, 4vw, 2.75rem); letter-spacing: -0.015em; }
+h2 { font-size: 1.6rem; }
+
+p { margin: 0 0 1em; max-width: 66ch; }
+
+/* Toda cifra medida. Mono = tiene fuente y fecha (DESIGN.md §3). */
+.dato,
+.etiqueta,
+.eje {
+  font-family: var(--fuente-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.etiqueta {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-2);
+}
+
+.eje { font-size: 0.8125rem; color: var(--ink-3); }
+
+/* ---- .stat: el número medido ------------------------------------------ */
+
+.stat { display: flex; align-items: baseline; gap: calc(var(--paso) * 2); }
+
+.stat__valor {
+  font-family: var(--fuente-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  font-size: clamp(4.5rem, 15vw, 8.5rem);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  color: var(--ink);
+}
+
+.stat__valor--acento { color: var(--accent); }
+
+/*
+ * tabular-nums le da a la coma una celda del ancho de un dígito. A tamaño
+ * display eso abre un hueco que hace leer "+2 , 6". Se corrige sólo acá: las
+ * cifras en tablas SÍ necesitan la coma tabular para alinear.
+ */
+.stat__sep { margin: 0 -0.22em; }
+.stat__meta { display: flex; flex-direction: column; gap: calc(var(--paso) * 0.5); }
+.stat__unidad { font-size: 1.0625rem; color: var(--ink-2); }
+
+/* ---- .fase ------------------------------------------------------------ */
+
+.fase {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--paso);
+  color: var(--accent);
+}
+
+.fase::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---- .fuente: procedencia pegada al dato (A4) ------------------------- */
+
+.fuente {
+  font-family: var(--fuente-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.fuente:hover { color: var(--ink-2); border-bottom-color: var(--ink-3); }
+
+/* ---- .aviso: la nota que desactiva una lectura errónea ---------------- */
+
+.aviso {
+  border-left: 2px solid var(--line);
+  padding-left: calc(var(--paso) * 2);
+  color: var(--ink-2);
+  font-size: 1rem;
+}
+
+.aviso__titulo { margin-bottom: var(--paso); }
+.aviso strong { color: var(--ink); font-weight: 600; }
+.aviso p:last-child { margin-bottom: 0; }
+.aviso--mt { margin-top: calc(var(--paso) * 3); }
+
+/* ---- .region: panel de impacto ---------------------------------------- */
+
+.region { border-top: 1px solid var(--line); padding: calc(var(--paso) * 2) 0; }
+.region__lugar { display: block; margin-bottom: calc(var(--paso) * 0.5); }
+.region__que { font-size: 1.25rem; }
+
+/* ---- .serie: línea temporal ------------------------------------------- */
+
+.serie { width: 100%; height: auto; display: block; }
+.serie__linea { fill: none; stroke: var(--ink); stroke-width: 0.6; opacity: 0.5; }
+.serie__cero { stroke: var(--ink-3); stroke-width: 1; }
+.serie__marca { fill: var(--ink-2); }
+
+/* Frío/cálido, jamás bueno/malo (A9). */
+.serie__area { stroke: none; }
+.serie__area--calido { fill: var(--d2); opacity: 0.85; }
+.serie__area--frio { fill: var(--d-2); opacity: 0.85; }
+.serie__punto--calido { fill: var(--d3); }
+.serie__punto--frio { fill: var(--d-3); }
+.serie__punto--hoy { fill: var(--ink); }
+.serie__etiqueta { margin: calc(var(--paso) * 3) 0 var(--paso); }
+.serie__fuente { margin-top: var(--paso); }
+
+/* ---- Estado y degradación --------------------------------------------- */
+
+.estado__stat { margin-top: calc(var(--paso) * 3); }
+.estado__frase { margin-top: calc(var(--paso) * 4); }
+.estado__nota { margin-top: calc(var(--paso) * 3); color: var(--ink-2); }
+.estado__nota strong { color: var(--ink); font-weight: 600; }
+
+.degradado {
+  border-left: 2px solid var(--ink-2);
+  padding-left: calc(var(--paso) * 2);
+  margin-bottom: calc(var(--paso) * 2);
+}
+
+.degradado__titulo { color: var(--ink-2); margin-bottom: var(--paso); }
+.degradado__lista { margin: 0; padding-left: 1.2em; color: var(--ink-2); }
+.degradado__lista .dato { color: var(--ink); }
+
+/* ---- Fuentes ---------------------------------------------------------- */
+
+.fuentes__lista { margin: 0 0 var(--paso); padding-left: 1.2em; color: var(--ink-2); }
+.pie__nota { margin-top: var(--paso); color: var(--ink-3); }
+
+/* ---- Bloques ---------------------------------------------------------- */
+
+.bloque { padding: calc(var(--paso) * 7) 0; border-top: 1px solid var(--line); }
+.bloque:first-child { border-top: 0; }
+
+.rejilla-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: calc(var(--paso) * 5);
+}
+
+@media (min-width: 860px) {
+  .rejilla-2 { grid-template-columns: 1.1fr 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

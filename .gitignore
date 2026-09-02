@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.env*.local
+next-env.d.ts
+*.tsbuildinfo
+
+# Capturas de verificación visual, no son fuente
+.shots/
+
+# Generado por la ingesta en cada build. Se versiona el generador, no la salida.
+/data/*.json
+# Excepción: instantánea versionada para el fallback offline (B1.1).
+!/data/seed.json
