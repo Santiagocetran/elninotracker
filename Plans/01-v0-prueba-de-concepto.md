@@ -205,10 +205,19 @@ Cuando la observación supera su cadencia, la portada lo dice **arriba**, con
 antigüedad y fecha de la última observación buena. Nunca un número viejo como si
 fuera de hoy.
 
-### B1.4 · Cron que visite la portada
+### B1.4 · Cron que visite la portada ✅
 ISR revalida con la primera request **posterior** al TTL. Sin tráfico, no se
 actualiza nada. Un cron que visite la portada es parte del mecanismo, no un
 extra.
+
+**Restricción del plan Hobby, descubierta al desplegar:** Vercel Hobby sólo
+admite cron **diario**. Un `0 * * * *` no es una advertencia — **rechaza el
+deployment** con *"Hobby accounts are limited to daily cron jobs"*. Fue la causa
+de que el primer deploy no produjera nada.
+
+Queda en `0 12 * * *` (09:00 ART). Alcanza: el CPC publica el weekly los lunes y
+RONI/ONI una vez por mes; el cron sólo pone un piso, porque con tráfico orgánico
+la página revalida cada hora igual. Subir la frecuencia requiere plan Pro.
 
 ---
 
@@ -236,9 +245,13 @@ Es la fuente **más frágil** del conjunto: HTML o texto editorial, no un `.txt`
 columnas fijas. Necesita su propio fixture, y su fallo no debe tumbar la portada
 — si no se puede leer, se omite el bloque y se deja el link.
 
-### B3.3 · Deploy
+### B3.3 · Deploy ✅
 Commit, remote, proyecto `elninotracker` en Vercel.
 **Listo cuando:** `curl` —no el navegador— muestra el H1 y el valor en el HTML.
+
+Hecho: `https://elninotracker.vercel.app` responde 200 y su HTML crudo trae
+`<title>`, la fase (`El Niño · débil`), el H1 con el valor y el trimestre. Repo
+público bajo MIT (código) y CC BY 4.0 (contenido).
 
 ### B3.4 · Observar una actualización real
 No se cierra el día que se escribe. Se cierra cuando pasa una semana sin que
