@@ -203,6 +203,26 @@ contenido genuinamente mejor, actualizado, y estructurado — no es un problema 
 
 ---
 
+## 11. Licencia
+
+Proyecto de código abierto, con licencias distintas para el código y para el contenido:
+
+| | Licencia |
+|---|---|
+| Código fuente | [MIT](LICENSE) |
+| Textos, explicaciones y paneles regionales | [CC BY 4.0](LICENSE-CONTENT) |
+| Datos de índices ENSO (NOAA CPC) | Dominio público |
+| Tiles de anomalía de TSM (NASA GIBS) | Dominio público |
+
+Se separan a propósito: una licencia de software aplicada a prosa editorial es
+jurídicamente ambigua, y el contenido en castellano —no el código— es la parte
+no-commodity de este proyecto (§5.2).
+
+Si reutilizás el contenido, sostené la regla del §8.2: **nunca pronóstico
+propio**, siempre fuente, fecha y enlace.
+
+---
+
 ## Contexto: de dónde salió esto
 
 Surgió mientras se analizaba agregar alertas meteorológicas al Riccitelli Live Dashboard
