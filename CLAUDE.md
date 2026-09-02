@@ -22,7 +22,8 @@ pnpm check:design   contraste AA · colores literales · firma de dato
 
 | | Status |
 |---|---|
-| `Plans/01-v0-prueba-de-concepto.md` | **Current.** Revised after an external audit. Start here. |
+| `Plans/01-v0-prueba-de-concepto.md` | **Done except B3.4/B3.5.** Read for the defects it fixed. |
+| `Plans/02-v1-que-significa-para-mi.md` | **Current.** Awaiting audit before implementation. Start here. |
 | `DESIGN.md` | Current, except §8's claim that "sin fuente no compila" — that is aspirational, not enforced. |
 | `CLAUDE.md` | Current. |
 | `README.md` | **Partly stale.** §6 lists a dead endpoint, §7 prescribes Vite + Recharts. Founding doc, owner's call to amend. |
