@@ -28,6 +28,19 @@ pnpm check:design   contraste AA · colores literales · firma de dato
 | `CLAUDE.md` | Current. |
 | `README.md` | **Partly stale.** §6 lists a dead endpoint, §7 prescribes Vite + Recharts. Founding doc, owner's call to amend. |
 
+### Operational traps — learned the hard way
+
+- **Deployed:** `https://elninotracker.vercel.app`. Public repo, MIT (code) +
+  CC BY 4.0 (content).
+- **Vercel Hobby rejects any sub-daily cron.** It does not degrade it — the
+  deployment fails with "Hobby accounts are limited to daily cron jobs". Keep
+  `vercel.json` at one per day.
+- **`gh`'s active account decides git push identity, and it keeps flipping.**
+  This machine also has a work account (`santiagoGrupoRiccitelli`) that has no
+  `workflow` scope and no access to this repo. `origin` now pins the user in the
+  URL (`https://Santiagocetran@github.com/...`) so a flip no longer breaks the
+  push. If it still fails: `gh auth switch --user Santiagocetran`.
+
 ### Known-broken, audited 2026-09-02 — fixed in this pass
 
 The five defects below are fixed and covered by tests/checks (Plan 01 B0/B2/B3.1):
