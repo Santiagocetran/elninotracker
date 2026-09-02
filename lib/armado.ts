@@ -6,6 +6,7 @@
  * y, en runtime, se muestra como degradación en vez de tirar abajo la página.
  */
 
+import type { Advisory } from './sources/cpc-advisory'
 import type { Dato, Fase, Intensidad } from './enso'
 import { faseDesdeAnomalia, intensidadDesdeAnomalia } from './enso'
 import { CPC_ONI, type TemporadaONI } from './sources/cpc-oni'
@@ -41,6 +42,12 @@ export type DatosInicio = {
   estado: EstadoInicio
   historico: Historico
   origen: 'noaa' | 'seed'
+  /**
+   * Estado oficial declarado por el CPC. Es `null` cuando el comunicado no se
+   * pudo leer: es la fuente más frágil y su fallo omite el bloque en vez de
+   * tumbar la portada (Plan 01 B3.2).
+   */
+  advisory: Advisory | null
 }
 
 export function validarEstructural(
@@ -84,7 +91,7 @@ export function armarDatos(
   temporadas: TemporadaONI[],
   ronis: TemporadaRONI[],
   origen: 'noaa' | 'seed',
-): DatosInicio {
+): Omit<DatosInicio, 'advisory'> {
   validarEstructural(semanas, temporadas, ronis)
 
   const ultimaSemana = semanas.at(-1)!

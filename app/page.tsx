@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { Degradacion } from '@/components/Degradacion'
+import { Oficial } from '@/components/Oficial'
 import { Serie } from '@/components/Serie'
 import { Stat } from '@/components/Stat'
 import { getDatos } from '@/lib/datos'
@@ -13,7 +14,7 @@ import { anomalia, fechaCorta } from '@/lib/formato'
  * seed versionado cuando NOAA no responde.
  */
 export default async function Home() {
-  const { estado, historico } = await getDatos()
+  const { estado, historico, advisory } = await getDatos()
 
   return (
     <main className="envoltorio" data-fase={estado.fase}>
@@ -87,7 +88,10 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 3 · Qué significa para mí — el diferencial. Va ARRIBA del mapa. */}
+      {/* 3 · Lo que declara el CPC. Separado de nuestra clasificación a propósito. */}
+      <Oficial advisory={advisory} />
+
+      {/* 4 · Qué significa para mí — el diferencial. Va ARRIBA del mapa. */}
       <section className="bloque">
         <h2>¿Qué significa para mí?</h2>
         <p className="aviso aviso--mt">

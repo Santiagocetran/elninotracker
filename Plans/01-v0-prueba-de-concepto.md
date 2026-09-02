@@ -238,12 +238,25 @@ Nota honesta: `DESIGN.md` §8 afirma que "sin fuente no compila". **Hoy es falso
 — `components/Valor.tsx:11` recibe un `number` pelado. O se hace cumplir, o se
 corrige la afirmación.
 
-### B3.2 · Estado oficial del CPC
+### B3.2 · Estado oficial del CPC ✅
 Relayar el *ENSO Advisory* vigente: texto declarado, fecha y link. Cierra B0.2.
 
 Es la fuente **más frágil** del conjunto: HTML o texto editorial, no un `.txt` de
 columnas fijas. Necesita su propio fixture, y su fallo no debe tumbar la portada
 — si no se puede leer, se omite el bloque y se deja el link.
+
+**Hecho.** Se usa `ensodisc_Sp.shtml`, la traducción **oficial de NOAA** — así no
+traducimos ni interpretamos nosotros, que era el riesgo del README §8.2. El
+README §2 ya señalaba que existe y casi nadie la conoce.
+
+El parser ancla en el texto del comunicado, no en el markup (HTML de los 90 con
+`<font>` y tablas anidadas). Verificado: con la fuente inalcanzable la portada
+sigue viva, muestra el fallback, **no inventa un estado** y deja el enlace.
+
+Por qué el bloque es imprescindible y no decorativo: en agosto de 2026 nuestro
+umbral sobre RONI daba **débil**, mientras el CPC mantenía **Advertencia de El
+Niño** con >90% de probabilidad de un evento **muy fuerte**. Mostrar uno solo de
+los dos desinforma en cualquiera de las dos direcciones.
 
 ### B3.3 · Deploy ✅
 Commit, remote, proyecto `elninotracker` en Vercel.
