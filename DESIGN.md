@@ -166,7 +166,11 @@ sala de máquinas. Se asume que quien entra sabe lo que busca.
 - **Nunca titular como diario.** Ver anti-patrón A3.
 - **La incertidumbre se muestra, no se esconde.** Un rango o una probabilidad da más confianza que
   un número solo, no menos.
-- **pt-BR desde el día uno.** Nada de texto hardcodeado, ni siquiera en un placeholder.
+- **Arquitectura localizada desde el día uno; traducción pt-BR diferida.** Nada de
+  texto hardcodeado, ni siquiera en un placeholder: rutas, diccionarios y esquema
+  soportan pt-BR desde v1. Pero `/pt` devuelve 404 hasta que exista traducción
+  real — servir castellano bajo bandera portuguesa es peor que no ofrecerlo
+  (Plan 02 D1).
 
 ---
 

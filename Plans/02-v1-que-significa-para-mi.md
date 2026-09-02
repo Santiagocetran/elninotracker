@@ -2,7 +2,32 @@
 
 > Corresponde a **README §9, v1** y **§5.2**, que el propio README llama
 > *"el verdadero diferencial"*.
-> Abierto 2026-09-02 · **revisión 2 tras auditoría, mismo día.**
+> Abierto 2026-09-02 · **revisión 3 tras segunda auditoría, mismo día.**
+> Aprobado para ejecución.
+
+## Qué cambió en la revisión 3
+
+Cuatro correcciones de modelo. Ninguna replantea el proyecto.
+
+1. **El estado editorial permitía combinaciones imposibles** — `validado` con
+   revisor `null`. Ahora es una unión discriminada donde el estado *es* la
+   evidencia, y `validado` exige especialista y credencial.
+2. **Una fuente podía autodeclararse oficial.** `{ clase: 'organismo-oficial',
+   url: 'https://example.com' }` pasaba el check. Ahora hay registro cerrado y
+   las afirmaciones referencian ids, no objetos.
+3. **El contenido editorial chocaba con i18n.** Decía que las cadenas viven en
+   archivos por idioma y a la vez ponía `texto: string` en el esquema. Se
+   separan: chrome en diccionario y verificado por ESLint; contenido editorial
+   en el esquema por locale y verificado por un validador de ids.
+4. **`confianza: alta|media|baja` era una afirmación sin fuente** disfrazada de
+   metadato: parecía evaluación científica y nadie definía quién la asignaba. Se
+   elimina. Queda `evidencia: consistente | mixta`, que describe la fuente.
+
+Además: `estacion` pasa a tipo cerrado, `sin-señal-documentada` se vuelve una
+clase de primera —para no empujar a inventar contenido en fase neutral—, el
+presupuesto del mapa pasa a tener números verificables, el mapa usa el
+`<Default>` de GIBS confirmando el tile, y los borradores **no** se bloquean en
+`robots.txt` porque el crawler necesita entrar para leer el `noindex`.
 
 ## Qué cambió en la revisión 2
 
@@ -51,23 +76,44 @@ mostró que no lo impedía. Los cambios de fondo:
 
 Ninguna es técnica. Todas bloquean.
 
-### D0.1 · Escalera de estados editoriales
+### D0.1 · Estado editorial derivado de la evidencia
+Los campos sueltos permitían estados imposibles —`validado` con revisor `null`—
+así que el estado **es** la evidencia, en una unión discriminada:
+
 ```ts
-type EstadoEditorial = 'borrador' | 'revisado' | 'validado'
+type RevisionDueño = {
+  autor: string
+  fecha: string
+  hashContenido: string
+}
+
+type RevisionEditorial =
+  | { estado: 'borrador' }
+  | ({ estado: 'revisado' } & RevisionDueño)
+  | {
+      estado: 'validado'
+      revisionDueño: RevisionDueño
+      especialista: string
+      credencial: string      // por qué esta persona puede validar esto
+      fecha: string
+      hashContenido: string
+    }
 ```
 
-| Estado | Quién | Indexable | Dónde aparece |
-|---|---|---|---|
-| `borrador` | nadie todavía | **no** (`noindex`) | sólo por URL directa |
-| `revisado` | el dueño | sí | navegación, sitemap, portada |
-| `validado` | especialista nombrado | sí | además acredita al revisor |
+No se puede declarar `validado` sin acreditar quién validó y con qué credencial.
+
+**El hash cubre** texto, estación, evidencia, fuentes **y traducciones**. Si
+cualquiera cambia, el estado **degrada automáticamente a `borrador`**: no se
+"conserva" una revisión sobre contenido que ya no es el revisado.
+
+| Estado | Indexable | Dónde aparece |
+|---|---|---|
+| `borrador` | **no** (`noindex`) | sólo por URL directa |
+| `revisado` | sí | navegación, sitemap, portada |
+| `validado` | sí | además acredita al especialista |
 
 El dueño pidió desplegar antes de revisar y eso se respeta: **el borrador se
 publica y se mira en producción.** Lo que no se hace es ofrecérselo a Google.
-Indexar una afirmación climática sin revisar ataca el único activo del sitio.
-
-`validado` existe porque `revisado` no es lo mismo que revisión de especialista,
-y el sitio no debe insinuar lo contrario.
 
 ### D0.2 · Matriz de rutas
 ```
@@ -115,52 +161,96 @@ Va antes del contenido: cada panel nuevo encarece la extracción.
   de JSX. Sin esto, el criterio de "ninguna cadena hardcodeada" no es
   verificable.
 
-**Listo cuando:** ESLint corre en CI y falla al introducir un literal en JSX.
+**Dos coberturas distintas, no confundirlas:**
+
+| | Vive en | Se verifica con |
+|---|---|---|
+| Chrome de interfaz | diccionario por idioma | ESLint sobre literales de JSX |
+| Contenido editorial | `texto: Record<Locale, string>` en el esquema | validador por id: toda afirmación cubre los locales activos, con las mismas fuentes |
+
+ESLint **no** cubre el contenido editorial y no debe intentarlo: son datos, no
+cadenas de interfaz.
+
+- **Corregir `DESIGN.md:169`**, que dice "pt-BR desde el día uno" mientras el
+  plan devuelve 404. La redacción correcta es *arquitectura localizada en v1,
+  traducción pt-BR diferida*. Actualizar también el roadmap del README.
+
+**Listo cuando:** ESLint corre en CI y falla al introducir un literal en JSX, y
+el validador editorial falla si una afirmación no cubre los locales activos.
 
 ---
 
 ## Bloque D2 · Esquema y validadores
 
 ### D2.1 · Climatología — el único tipo de v1
+
+**Registro cerrado de fuentes.** Un objeto libre permitía inventar
+`{ clase: 'organismo-oficial', url: 'https://example.com' }` y pasar el check.
+Las afirmaciones referencian **ids**, no objetos:
+
 ```ts
-type Fuente = {
-  id: string                  // 'senamhi', 'ciifen', 'noaa-climate-gov'
-  clase: 'organismo-oficial' | 'centro-regional' | 'literatura'
-  nombre: string
-  url: string                 // absoluta, verificada
-}
+const FUENTES = {
+  senamhi:  { organismo: 'SENAMHI', clase: 'organismo-oficial', titulo: '…',
+              url: '…', consultadoEl: '2026-09-02', seccion: '…' },
+  enfen:    { … },
+  ciifen:   { … },
+  inmet:    { … },
+  iri:      { … },
+  noaaEnso: { … },
+} as const
 
-type Afirmacion = {
-  texto: string
-  estacion: string | null     // 'primavera-verano' | null si aplica todo el año
-  confianza: 'alta' | 'media' | 'baja' | 'sin-señal-clara'
-  fuentes: [Fuente, ...Fuente[]]   // al menos una, POR afirmación
-}
-
-type Climatologia = {
-  id: string
-  nombre: string
-  paises: string[]
-  porFase: Record<Fase, [Afirmacion, ...Afirmacion[]]>  // no vacío por tipo
-  estadoEditorial: EstadoEditorial
-  revisadoPor: string | null
-  revisadoEl: string | null
-  hashRevisado: string | null   // hash del contenido al momento de revisar
-}
+type FuenteId = keyof typeof FUENTES
 ```
 
-Qué corrige cada pieza, respecto de la auditoría:
+Cada registro lleva organismo, título, URL, fecha de consulta y —para documentos
+largos— página o sección. Así la referencia sigue siendo revisable aunque el
+sitio cambie.
 
-- `fuentes` es **por afirmación**, no por panel: una URL no puede quedar
-  respaldando un párrafo entero de afirmaciones distintas.
-- `[Afirmacion, ...Afirmacion[]]` hace que un array vacío **no compile**.
-- `clase` distingue organismo oficial de literatura; un check puede exigir que
-  toda afirmación tenga al menos una fuente de clase `organismo-oficial`.
-- `confianza` incluye `sin-señal-clara`: decir que no se sabe es una respuesta
-  válida y más creíble que inventar una consecuencia.
-- `hashRevisado` **invalida la revisión si el texto cambia después**. Sin esto,
-  `revisadoPor` sobrevive a una edición posterior y miente.
-- **No hay campo de probabilidad.** No existe, así que no se puede inventar.
+**La afirmación:**
+
+```ts
+type Estacion = 'todo-el-año' | 'primavera-verano' | 'otoño-invierno'
+              | 'primavera' | 'verano' | 'otoño' | 'invierno'
+
+type Afirmacion =
+  | {
+      clase: 'documentada'
+      texto: Record<Locale, string>          // el contenido editorial vive acá
+      estacion: Estacion
+      evidencia: 'consistente' | 'mixta'     // lo que dice la fuente, no una nota nuestra
+      fuentes: [FuenteId, ...FuenteId[]]
+    }
+  | {
+      clase: 'sin-señal-documentada'
+      texto: Record<Locale, string>
+      fuentes: [FuenteId, ...FuenteId[]]     // que respalden la AUSENCIA de señal
+    }
+```
+
+Tres cosas que corrige respecto de la revisión 2:
+
+- **`confianza: alta|media|baja` se elimina.** Parecía una evaluación científica
+  y nadie definía quién la asignaba: era una afirmación sin fuente disfrazada de
+  metadato. Queda `evidencia: consistente | mixta`, que describe lo que dice la
+  fuente, no nuestra impresión.
+- **`estacion` es un tipo cerrado**, no texto libre.
+- **`sin-señal-documentada` es una clase de primera**, con sus propias fuentes.
+  Obligar arrays no vacíos sin esto empujaba a inventar contenido para la fase
+  neutral. Decir "acá no hay señal clara, y esto lo respalda" es una respuesta
+  completa.
+
+**El texto editorial vive en el esquema, por locale** — no en el diccionario de
+interfaz. Los dos se separan a propósito (ver D1).
+
+```ts
+type Climatologia = {
+  id: string
+  nombre: Record<Locale, string>
+  paises: string[]
+  porFase: Record<Fase, [Afirmacion, ...Afirmacion[]]>
+  revision: RevisionEditorial
+}
+```
 
 ### D2.2 · Outlook — fuera de v1
 La variante de pronóstico regional se elimina. Vuelve cuando exista una ingesta
@@ -236,8 +326,11 @@ Alcance congelado en las siete del §5.2; no se amplía en v1.
 
 Criterios que la revisión 1 no tenía:
 
-- **Última fecha disponible:** se descubre desde `WMTSCapabilities.xml`, no se
-  asume "ayer". El último rango temporal de la capa da el borde real.
+- **Última fecha disponible:** se toma el `<Default>` de la dimensión temporal
+  de la capa **y se confirma que el tile responde**, retrocediendo día a día si
+  no. Verificado el 2026-09-02: el tile de ese día devuelve **404** y el del
+  2026-09-01 devuelve 200. Asumir "ayer", o el fin del último intervalo, rompe
+  el mapa.
 - **Antigüedad máxima:** si el tile más nuevo supera los 5 días, el bloque se
   marca como desactualizado, igual que las series.
 - **Fallo de tile:** error o 404 muestra un estado vacío con enlace a NASA
@@ -247,8 +340,11 @@ Criterios que la revisión 1 no tenía:
 - **Encuadre:** límites y zoom fijos sobre el Pacífico ecuatorial y Sudamérica;
   no se entrega un globo libre.
 - **Accesibilidad:** el mapa no puede ser la única vía a ningún dato.
-- **Presupuesto de JS medible:** es el **primer JS de cliente del proyecto**.
-  Carga diferida por viewport, y un techo declarado que la CI verifica.
+- **Presupuesto de JS, con números:** es el **primer JS de cliente del
+  proyecto**. Dos techos que la CI verifica por separado:
+  **≤ 15 KB comprimidos de JS inicial** en la ruta (el mapa no entra en el
+  bundle de entrada) y **≤ 260 KB comprimidos** al entrar en viewport, que es
+  lo que pesa `maplibre-gl`. "Un techo declarado" no era verificable.
 - **Atribución al dataset**, no sólo al servicio: GHRSST Level 4 MUR, además de
   NASA GIBS. NASA pide citar el dataset, no el entregador de imágenes.
 - La paleta arcoíris no se replica en ningún otro gráfico (A2).
@@ -258,6 +354,11 @@ Criterios que la revisión 1 no tenía:
 ## Bloque D6 · SEO
 
 Sólo para contenido `revisado` o `validado`.
+
+**Los borradores NO se bloquean en `robots.txt`.** El crawler necesita poder
+entrar para leer el `noindex`; bloquearlo en robots consigue lo contrario de lo
+buscado. Quedan fuera de sitemap, de los `alternates` canónicos y de todo enlace
+interno — que es lo que efectivamente los mantiene fuera del índice.
 
 `sitemap.ts` con alternates localizados, `robots.ts`, JSON-LD (`Dataset` para
 series, `Article` para explicaciones), OG image.
