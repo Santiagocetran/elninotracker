@@ -29,8 +29,18 @@ test('toda afirmación cita fuentes del registro cerrado, con URL https', () => 
   }
 })
 
-test('la región se despliega como borrador', () => {
-  assert.equal(estadoEfectivo(litoral).estado, 'borrador')
+test('el Litoral está revisado por el dueño, con hash vigente', () => {
+  const e = estadoEfectivo(litoral)
+  assert.equal(e.estado, 'revisado')
+  // estadoEfectivo degrada a 'borrador' si el hash no coincide, así que llegar
+  // acá prueba que el hash congelado corresponde al contenido actual.
+  assert.ok(e.estado === 'revisado' && e.autor.length > 0, 'revisión sin autor')
+})
+
+test('revisado por el dueño NO es validado por un especialista', () => {
+  // Distinción del Plan 02 D0.1: el sitio no debe insinuar una autoridad que
+  // no tiene. Mientras no haya especialista acreditado, no puede ser 'validado'.
+  assert.notEqual(estadoEfectivo(litoral).estado, 'validado')
 })
 
 test('una revisión vigente se conserva; editar el texto la degrada a borrador', () => {

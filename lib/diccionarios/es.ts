@@ -63,6 +63,9 @@ export const es = {
     titulo: '¿Qué significa para mí?',
     pendiente:
       'Los paneles de impacto por región todavía no están publicados. Es la parte de mayor valor del sitio y la de mayor riesgo editorial, así que no se improvisa.',
+    entrada:
+      'Lo que suele pasar en cada región durante esta fase, según el registro histórico y con la fuente de cada afirmación a la vista.',
+    faltan: 'Las demás regiones todavía no están publicadas.',
   },
 
   historico: {

@@ -66,5 +66,15 @@ export const litoral: Climatologia = {
 
   // Se despliega sin revisar. El dueño revisa por URL directa y recién entonces
   // pasa a 'revisado' (D3).
-  revision: { estado: 'borrador' },
+  // Revisado por el dueño del proyecto el 2026-09-02. Esto NO es validación de
+  // un especialista en clima: ese es el estado 'validado', todavía pendiente
+  // (Plan 02 D0.1). El hash congela el contenido revisado — cualquier edición
+  // posterior del texto, la estación, la evidencia o las fuentes lo degrada
+  // solo a 'borrador'.
+  revision: {
+    estado: 'revisado',
+    autor: 'Santiago Cetrán',
+    fecha: '2026-09-02',
+    hashContenido: 'eee260e201331880e0cb981d8450e23024f88227c8ce8737e0d64198d620eaa6',
+  },
 }

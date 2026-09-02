@@ -9,6 +9,7 @@ import { frasePacífico } from '@/lib/copy'
 import { etiquetaEstado } from '@/lib/enso'
 import { esLocaleActivo } from '@/lib/i18n'
 import { getDiccionario } from '@/lib/diccionarios'
+import { regionesPublicas } from '@/lib/regiones'
 import { anomalia, fechaCorta } from '@/lib/formato'
 
 /**
@@ -19,6 +20,7 @@ import { anomalia, fechaCorta } from '@/lib/formato'
  */
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
+  const regiones = regionesPublicas()
   if (!esLocaleActivo(lang)) notFound()
   const d = getDiccionario(lang)
 
@@ -118,7 +120,23 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       {/* 4 · Qué significa para mí — el diferencial. Va ARRIBA del mapa. */}
       <section className="bloque">
         <h2>{d.significa.titulo}</h2>
-        <p className="aviso aviso--mt">{d.significa.pendiente}</p>
+        {regiones.length === 0 ? (
+          <p className="aviso aviso--mt">{d.significa.pendiente}</p>
+        ) : (
+          <>
+            <p className="significa__entrada">{d.significa.entrada}</p>
+            <ul className="significa__lista">
+              {regiones.map((r) => (
+                <li key={r.id}>
+                  <a className="significa__region" href={`/${lang}/regiones/${r.id}`}>
+                    {r.nombre[lang]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p className="eje significa__faltan">{d.significa.faltan}</p>
+          </>
+        )}
       </section>
 
       {/* 5 · El histórico */}

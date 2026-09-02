@@ -291,3 +291,27 @@ p { margin: 0 0 1em; max-width: 66ch; }
   font-size: 1rem;
   max-width: 62ch;
 }
+
+/* ---- .significa: entrada a los paneles regionales --------------------- */
+
+.significa__entrada { margin-top: calc(var(--paso) * 3); color: var(--ink-2); }
+
+.significa__lista {
+  list-style: none;
+  margin: calc(var(--paso) * 2) 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.significa__lista li { border-bottom: 1px solid var(--line); }
+
+.significa__region {
+  display: block;
+  padding: calc(var(--paso) * 2) 0;
+  font-size: 1.25rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.significa__region:hover { color: var(--accent); }
+.significa__faltan { margin-top: calc(var(--paso) * 2); }

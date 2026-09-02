@@ -16,13 +16,34 @@ function render(faseActual: 'nino' | 'nina' | 'neutral' | null) {
   )
 }
 
-test('el panel en borrador muestra el distintivo visible', () => {
-  const html = render('nino')
+/**
+ * El distintivo depende del ESTADO, no de qué región sea. Se prueba contra un
+ * clon en borrador para que el test siga midiendo el mecanismo cuando el
+ * contenido real pase a revisado — que es justo lo que acaba de pasar.
+ */
+const litoralBorrador = { ...litoral, revision: { estado: 'borrador' } as const }
+
+function renderBorrador() {
+  return renderToStaticMarkup(
+    <PanelRegion clima={litoralBorrador} lang="es" faseActual="nino" d={d} />,
+  )
+}
+
+test('un panel en borrador muestra el distintivo visible', () => {
+  const html = renderBorrador()
   assert.ok(
     html.includes(es.region.borrador.distintivo),
     'falta el sello BORRADOR',
   )
   assert.ok(html.includes(es.region.borrador.explicacion))
+})
+
+test('un panel revisado NO muestra el distintivo de borrador', () => {
+  const html = render('nino')
+  assert.ok(
+    !html.includes(es.region.borrador.distintivo),
+    'el sello BORRADOR sobrevivió a la revisión',
+  )
 })
 
 test('el panel enlaza a todas las fuentes citadas', () => {
@@ -57,12 +78,13 @@ test('sin fase de RONI se muestran las tres, sin adivinar', () => {
   }
 })
 
-test('la ruta del borrador declara noindex y no emite canonical', async () => {
+test('una ruta revisada es indexable', async () => {
   const m = await generateMetadata({
     params: Promise.resolve({ lang: 'es', region: 'litoral' }),
   })
-  assert.deepEqual(m.robots, { index: false, follow: true })
-  assert.equal(m.alternates, undefined)
+  // Revisado por el dueño ⇒ entra al índice. El caso noindex se cubre por el
+  // estado, no por la región: ver 'un panel en borrador…' arriba.
+  assert.notDeepEqual(m.robots, { index: false, follow: true })
 })
 
 test('el panel encuadra el contenido como asociación histórica, no pronóstico', () => {
