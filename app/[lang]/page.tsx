@@ -19,7 +19,8 @@ import { anomalia, fechaCorta } from '@/lib/formato'
 
 /**
  * Portada. Orden fijo según DESIGN.md §4: el estado primero; el mapa va después
- * de "Qué significa para mí" y nunca encabeza la página.
+ * de "Cómo afecta a tu región" (el bloque "Qué significa para mí" de README
+ * §5.2 / DESIGN.md §4) y nunca encabeza la página.
  * Los datos vienen de una función cacheada (lib/datos.ts y lib/mapa.ts); el
  * fallback es el seed versionado cuando NOAA no responde, y el mapa se omite
  * si GIBS no responde. Todo el texto de interfaz sale del diccionario por
@@ -133,7 +134,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       {/* 4 · Por qué pasa — el explicador del mecanismo (DESIGN.md §6.1) */}
       <Motor faseActual={estado.fase} d={d} />
 
-      {/* 5 · Qué significa para mí — el diferencial. Va ARRIBA del mapa. */}
+      {/* 5 · Cómo afecta a tu región — el diferencial. Va ARRIBA del mapa. */}
       <section className="bloque">
         <h2>{d.significa.titulo}</h2>
         {regiones.length === 0 ? (

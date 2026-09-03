@@ -100,7 +100,7 @@ export const es = {
   },
 
   significa: {
-    titulo: '¿Qué significa para mí?',
+    titulo: 'Cómo afecta a tu región',
     pendiente:
       'Todavía no publicamos los textos por región. Es la parte más útil del sitio y también la más fácil de arruinar, así que preferimos tardar.',
     entrada:
