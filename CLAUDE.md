@@ -28,7 +28,7 @@ pnpm check:design   contraste AA · colores literales · firma de dato
 | | Status |
 |---|---|
 | `Plans/01-v0-prueba-de-concepto.md` | **Done except B3.4/B3.5.** Read for the defects it fixed. |
-| `Plans/02-v1-que-significa-para-mi.md` | **Current.** D0–D3 done (i18n + rutas + ESLint + esquema editorial + región piloto Litoral en `borrador`). D4 (seis regiones), D5 (mapa), D6 (SEO) pendientes. Start here. |
+| `Plans/02-v1-que-significa-para-mi.md` | **Current.** D0–D3 done (i18n + rutas + ESLint + esquema editorial), Litoral ya `revisado`. D5 (mapa, `Plans/03-v1-D5-el-mapa.md`) hecho. D4 (seis regiones restantes, `Plans/04-v1-D4-regiones.md`) en curso, D6 (SEO) pendiente. Start here. |
 | `DESIGN.md` | Current, except §8's claim that "sin fuente no compila" — that is aspirational, not enforced. |
 | `CLAUDE.md` | Current. |
 | `README.md` | **Partly stale.** §6 lists a dead endpoint, §7 prescribes Vite + Recharts. Founding doc, owner's call to amend. |
@@ -56,11 +56,13 @@ The five defects below are fixed and covered by tests/checks (Plan 01 B0/B2/B3.1
 - Future dates fail the freshness check (`lib/validacion.ts`) — B2.2.
 - `scripts/check-design.ts` exists and fails on real violations — B3.1.
 
-v0 works; v1 is under way. The **pilot region** (`lib/regiones/litoral.ts`) ships as
-`borrador`: reachable at `/es/regiones/litoral`, `noindex`, out of sitemap/nav/homepage. Its
-climatology text is **unreviewed** — the owner reviews it by URL and it becomes `revisado`
-only then (a later text edit re-invalidates that by hash). The map and `/datos` are still out
-of scope (D5, v2).
+v0 works; v1 is under way. Four of seven regions (`lib/regiones/`: `litoral`, `sur-de-brasil`,
+`pampa-humeda`, `costa-peruana`) are `revisado` by the owner as of 2026-09-03 (Plan 02 D3, Plan
+04 D4a): indexed, in the sitemap, linked from the homepage. The remaining three — Chile
+central (El Niño only, La Niña unsourced), Cuyo, Altiplano — are D4b, blocked on missing
+sources (`Plans/04-v1-D4-regiones.md`); D4 does not close until those three validate.
+The map (`components/Mapa.tsx`, GIBS + maplibre, `Plans/03-v1-D5-el-mapa.md`) is done.
+`/datos` is still out of scope (v2).
 
 ## What the product is
 
@@ -186,3 +188,13 @@ freshness assertion that `wksst8110.for` would have failed.
 Name/domain, geographic scope (Argentina first vs. all of South America), who authors the regional
 impact copy, and whether the project is meant to be sustainable. These affect design decisions —
 ask rather than assume.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

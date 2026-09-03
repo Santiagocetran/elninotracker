@@ -22,6 +22,17 @@ const PROHIBIDO_PROBABILIDAD = /%|\bprobabilidad(es)?\b/i
 /** Futuro categórico: la climatología es condicional siempre (D4). */
 const PROHIBIDO_FUTURO = /\b(va|van|vas|voy|vamos)\s+a\s+\p{L}/iu
 
+/**
+ * Conjunto CERRADO, mismo criterio que `FUENTES`/`LOCALES` — no una regex de
+ * formato, que aceptaría un código con forma válida pero inexistente ("ZZ").
+ * Los ocho países sudamericanos relevantes al alcance del proyecto (Plan 04
+ * D4a); ampliable si el alcance crece.
+ */
+const PAISES_VALIDOS = ['AR', 'BO', 'BR', 'CL', 'EC', 'PE', 'PY', 'UY'] as const
+
+/** Slug seguro para la ruta `/es/regiones/[id]` (Plan 04 D4a). */
+const ID_VALIDO = /^[a-z0-9-]+$/
+
 function validarTextoAfirmacion(ctx: string, texto: Partial<Record<string, string>>): string[] {
   const errores: string[] = []
 
@@ -60,9 +71,22 @@ function validarAfirmacion(ctx: string, a: Afirmacion): string[] {
 export function validarClimatologia(clima: Climatologia): string[] {
   const errores: string[] = []
 
+  if (!ID_VALIDO.test(clima.id)) {
+    errores.push(`${clima.id}: id no es un slug válido ("${ID_VALIDO}")`)
+  }
+
   for (const loc of LOCALES_ACTIVOS) {
     if (!clima.nombre[loc]?.trim()) {
       errores.push(`${clima.id}: falta nombre para el locale activo "${loc}"`)
+    }
+  }
+
+  if (clima.paises.length === 0) {
+    errores.push(`${clima.id}: "paises" no puede estar vacío`)
+  }
+  for (const pais of clima.paises) {
+    if (!(PAISES_VALIDOS as readonly string[]).includes(pais)) {
+      errores.push(`${clima.id}: país "${pais}" no está en el conjunto cerrado PAISES_VALIDOS`)
     }
   }
 

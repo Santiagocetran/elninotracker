@@ -8,12 +8,25 @@
 import { estadoEfectivo, esIndexable, type Climatologia } from './esquema'
 import { assertClimatologiaValida } from './validar'
 import { litoral } from './litoral'
+import { surDeBrasil } from './sur-de-brasil'
+import { pampaHumeda } from './pampa-humeda'
+import { costaPeruana } from './costa-peruana'
 
-const TODAS: readonly Climatologia[] = [litoral]
+const TODAS: readonly Climatologia[] = [litoral, surDeBrasil, pampaHumeda, costaPeruana]
 
 // Falla al importar el módulo si una región no valida: mejor romper el build que
 // publicar una afirmación sin fuente.
 for (const clima of TODAS) assertClimatologiaValida(clima)
+
+// Falla si dos regiones comparten `id`: `Object.fromEntries` los pisaría en
+// silencio y una de las dos desaparecería del sitio sin ningún error (Plan 04
+// D4a).
+{
+  const ids = new Set(TODAS.map((c) => c.id))
+  if (ids.size !== TODAS.length) {
+    throw new Error('Climatología inválida: hay ids de región duplicados en TODAS')
+  }
+}
 
 export const REGIONES: Record<string, Climatologia> = Object.fromEntries(
   TODAS.map((c) => [c.id, c]),

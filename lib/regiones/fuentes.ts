@@ -16,6 +16,11 @@
  *   cpc.ncep.noaa.gov/products/analysis_monitoring/impacts/… .. 200
  *   cpc.ncep.noaa.gov/products/analysis_monitoring/ensocycle/elninosfc.shtml 200
  *   cpc.ncep.noaa.gov/products/analysis_monitoring/ensocycle/laninasfc.shtml 200
+ *
+ * Re-verificadas el 2026-09-03 (curl -A "Mozilla/5.0", Plan 04 D4a), texto
+ * idéntico — se agregan las entradas hermanas *NwPeru sobre las mismas dos URL:
+ *   cpc.ncep.noaa.gov/products/analysis_monitoring/ensocycle/elninosfc.shtml 200
+ *   cpc.ncep.noaa.gov/products/analysis_monitoring/ensocycle/laninasfc.shtml 200
  */
 
 export const FUENTES = {
@@ -63,6 +68,34 @@ export const FUENTES = {
     url: 'https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/ensocycle/laninasfc.shtml',
     consultadoEl: '2026-09-02',
     seccion: 'Precipitation — JJA, drier than normal over southern Brazil / central Argentina',
+  },
+
+  // Entradas HERMANAS de noaaCpcElNino/noaaCpcLaNina (Plan 04 D4a): misma URL,
+  // mismo `consultadoEl` re-verificado, pero acotadas al pasaje sobre Perú —
+  // no se reusa la entrada de Brasil/Argentina porque `seccion` es por pasaje,
+  // no por URL (protocolo de cita, punto 5). Nunca se tocan ni renombran las
+  // entradas originales: Litoral las referencia por id y su hash depende de eso.
+  // Sigue siendo la referencia correcta pese a no cambiar de un día a otro: es
+  // una composición climatológica de décadas de eventos, no una página de
+  // estado (protocolo de cita, punto 6). Re-verificado con `curl -A
+  // "Mozilla/5.0"` el 2026-09-03, texto idéntico al de 2026-09-02.
+  noaaCpcElNinoNwPeru: {
+    organismo: 'NOAA Climate Prediction Center',
+    clase: 'organismo-oficial',
+    titulo: 'Warm (El Niño) episodes — global temperature and precipitation patterns',
+    url: 'https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/ensocycle/elninosfc.shtml',
+    consultadoEl: '2026-09-03',
+    seccion:
+      'Precipitation — «wetter than normal conditions tend to be observed 1) during December-February (DJF) along coastal Ecuador, northwestern Peru […]»',
+  },
+  noaaCpcLaNinaNwPeru: {
+    organismo: 'NOAA Climate Prediction Center',
+    clase: 'organismo-oficial',
+    titulo: 'Cold (La Niña) episodes — global temperature and precipitation patterns',
+    url: 'https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/ensocycle/laninasfc.shtml',
+    consultadoEl: '2026-09-03',
+    seccion:
+      'Precipitation — «Drier than normal conditions are generally observed along coastal Ecuador, northwestern Peru […] during DJF»',
   },
 } as const
 
