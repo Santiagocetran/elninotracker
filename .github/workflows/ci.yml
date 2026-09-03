@@ -36,3 +36,9 @@ jobs:
 
       - name: Build (tolera NOAA caído vía seed)
         run: pnpm build
+
+      - name: Instalar navegador de Playwright (cacheado por versión)
+        run: npx playwright install --with-deps chromium
+
+      - name: Presupuesto de JS del mapa (necesita .next generado)
+        run: pnpm check:mapa

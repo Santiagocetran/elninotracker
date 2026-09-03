@@ -1,23 +1,29 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { Degradacion } from '@/components/Degradacion'
+import { Mapa } from '@/components/Mapa'
 import { Motor } from '@/components/Motor'
 import { Oficial } from '@/components/Oficial'
 import { Serie } from '@/components/Serie'
 import { Stat } from '@/components/Stat'
 import { getDatos } from '@/lib/datos'
+import type { FrescuraItem } from '@/lib/armado'
 import { frasePacífico } from '@/lib/copy'
 import { etiquetaEstado } from '@/lib/enso'
 import { esLocaleActivo } from '@/lib/i18n'
 import { getDiccionario } from '@/lib/diccionarios'
+import { getMapaGIBS } from '@/lib/mapa'
 import { regionesPublicas } from '@/lib/regiones'
+import { GIBS } from '@/lib/sources/gibs'
 import { anomalia, fechaCorta } from '@/lib/formato'
 
 /**
- * Portada. Orden fijo según DESIGN.md §4: el estado primero, el mapa nunca.
- * Los datos vienen de una función cacheada (lib/datos.ts); el fallback es el
- * seed versionado cuando NOAA no responde. Todo el texto de interfaz sale del
- * diccionario por idioma (Plan 02 D1) — no hay literales en el JSX.
+ * Portada. Orden fijo según DESIGN.md §4: el estado primero; el mapa va después
+ * de "Qué significa para mí" y nunca encabeza la página.
+ * Los datos vienen de una función cacheada (lib/datos.ts y lib/mapa.ts); el
+ * fallback es el seed versionado cuando NOAA no responde, y el mapa se omite
+ * si GIBS no responde. Todo el texto de interfaz sale del diccionario por
+ * idioma (Plan 02 D1) — no hay literales en el JSX.
  */
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
@@ -25,13 +31,19 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   if (!esLocaleActivo(lang)) notFound()
   const d = getDiccionario(lang)
 
-  const { estado, historico, advisory } = await getDatos()
+  const [{ estado, historico, advisory }, mapa] = await Promise.all([
+    getDatos(),
+    getMapaGIBS(),
+  ])
+  const frescura: FrescuraItem[] = mapa
+    ? [...estado.frescura, { indice: 'Mapa', fecha: mapa, cadenciaDias: GIBS.cadenciaMaximaDias }]
+    : estado.frescura
 
   return (
     <main className="envoltorio" data-fase={estado.fase}>
       {/* Degradación: dinámica por request, el resto queda estático. */}
       <Suspense fallback={null}>
-        <Degradacion frescura={estado.frescura} d={d} />
+        <Degradacion frescura={frescura} d={d} />
       </Suspense>
 
       {/* 1 · El estado */}
@@ -143,7 +155,10 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         )}
       </section>
 
-      {/* 5 · El histórico */}
+      {/* 6 · El mapa — el raster GIBS, encuadrado y citado (DESIGN.md §6). */}
+      <Mapa tile={mapa} d={d} />
+
+      {/* 7 · El histórico */}
       <section className="bloque">
         <h2>{d.historico.titulo}</h2>
         <p className="etiqueta serie__etiqueta">{d.historico.etiquetaSerie}</p>
@@ -157,7 +172,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </p>
       </section>
 
-      {/* 6 · Fuentes */}
+      {/* 8 · Fuentes */}
       <footer className="bloque">
         <p className="etiqueta">{d.fuentes.titulo}</p>
         <ul className="fuentes__lista">

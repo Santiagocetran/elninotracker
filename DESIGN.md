@@ -265,7 +265,9 @@ En `scripts/check-design.ts`, corriendo en CI:
 3. **Sin colores literales.** Ningún hex fuera de `tracker.css`. Todo por token. (A6, A9)
 4. **Contraste AA** en todo par texto/fondo, verificado sobre los tokens.
 5. **`tabular-nums`** presente en toda clase que renderice cifras.
-6. **Atribución del mapa** presente cuando hay un tile de GIBS en el DOM.
+6. **Atribución del mapa** presente cuando hay un tile de GIBS. Lo verifica el
+   render en `tests/mapa.render.test.tsx` (Plan 03 D5): `check-design.ts` es
+   estático y no puede confirmar qué queda en el DOM.
 7. **Sin strings hardcodeados** en JSX: todo chrome pasa por el diccionario por idioma. Esto
    lo verifica **ESLint** (`react/jsx-no-literals`, Plan 02 D1), no `check-design.ts` — el
    contenido editorial es dato, no cadena de interfaz, y lo cubre un validador de ids aparte.

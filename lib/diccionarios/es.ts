@@ -116,6 +116,21 @@ export const es = {
       `Anomalía del índice ONI entre ${a0} y ${a1}. El punto más grande a la derecha es el valor más reciente: ${ultimo} grados.`,
   },
 
+  mapa: {
+    titulo: 'El mapa',
+    intro:
+      'La temperatura del mar en la superficie, comparada con lo habitual para la fecha. Es la imagen satelital de NASA, sin retocar: los colores son los que usa su leyenda.',
+    fechaPrefijo: 'Imagen del ',
+    leyendaTexto: 'Azul = más frío que lo habitual; rojo = más cálido que lo habitual.',
+    leyendaAlt:
+      'Leyenda oficial de NASA GIBS para la anomalía de temperatura del mar: de azul a rojo.',
+    atribucion: (dataset: string, servicio: string, osm: string) =>
+      `Imagen satelital de ${dataset} — servicio ${servicio}, contornos de ${osm}. `,
+    datasetEnlace: 'DATASET · NASA PO.DAAC · doi:10.5067/GHGMR-4FJ04 →',
+    vacio: 'No pudimos cargar el mapa ahora mismo. Podés verlo en NASA Worldview.',
+    vacioEnlace: 'ABRIR EN NASA WORLDVIEW →',
+  },
+
   fuentes: {
     titulo: 'Fuentes',
     roni: 'RONI — trimestre ',
